@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mantenimiento de Vehículos</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      color: #17202a;
+    }
+
+    header {
+      background: #111827;
+      color: white;
+      padding: 25px 20px;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: 28px;
+      margin-bottom: 8px;
+    }
+
+    header p {
+      color: #d1d5db;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 30px auto;
+      padding: 0 20px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 16px;
+      padding: 25px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    }
+
+    .card h2 {
+      margin-bottom: 10px;
+      font-size: 22px;
+    }
+
+    .card p {
+      color: #6b7280;
+      margin-bottom: 18px;
+      line-height: 1.5;
+    }
+
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+
+    input {
+      width: 100%;
+      padding: 14px;
+      border: 1px solid #d1d5db;
+      border-radius: 10px;
+      font-size: 16px;
+      margin-bottom: 15px;
+    }
+
+    button {
+      width: 100%;
+      padding: 15px;
+      border: none;
+      border-radius: 10px;
+      background: #16a34a;
+      color: white;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #15803d;
+    }
+
+    .service {
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 18px;
+      margin-top: 15px;
+    }
+
+    .service h3 {
+      margin-bottom: 8px;
+    }
+
+    .price {
+      font-size: 24px;
+      font-weight: bold;
+      margin: 12px 0;
+    }
+
+    .steps {
+      display: grid;
+      gap: 12px;
+    }
+
+    .step {
+      background: #f9fafb;
+      padding: 15px;
+      border-radius: 10px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 30px 20px;
+      color: #6b7280;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <h1>Mantenimiento de Vehículos</h1>
+    <p>Reserva tu servicio de manera rápida y sencilla</p>
+  </header>
+
+  <main class="container">
+
+    <section class="card">
+      <h2>🚗 Conoce tu vehículo</h2>
+      <p>
+        Ingresa el VIN de tu vehículo para comenzar.
+        Nuestro sistema identificará tu vehículo y preparará
+        la información necesaria para tu servicio.
+      </p>
+
+      <label for="vin">Número VIN</label>
+
+      <input
+        type="text"
+        id="vin"
+        placeholder="Ingresa los 17 caracteres del VIN"
+        maxlength="17"
+      >
+
+      <button onclick="buscarVIN()">
+        Buscar mi vehículo
+      </button>
+    </section>
+
+    <section class="card" id="resultado" style="display:none;">
+      <h2>Vehículo encontrado</h2>
+
+      <div class="service">
+        <h3 id="vehiculo">Vehículo</h3>
+        <p>Información del vehículo identificada correctamente.</p>
+
+        <strong>Aceite recomendado</strong>
+        <p id="aceite">Pendiente de consulta</p>
+
+        <strong>Filtro de aceite</strong>
+        <p id="filtro">Pendiente de consulta</p>
+
+        <div class="price">$89.99</div>
+
+        <button onclick="reservar()">
+          📅 Reservar mi servicio
+        </button>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>¿Cómo funciona?</h2>
+
+      <div class="steps">
+
+        <div class="step">
+          <strong>1️⃣ Ingresa tu VIN</strong>
+          <p>Identificamos tu vehículo.</p>
+        </div>
+
+        <div class="step">
+          <strong>2️⃣ Elige tu servicio</strong>
+          <p>Selecciona el mantenimiento que necesitas.</p>
+        </div>
+
+        <div class="step">
+          <strong>3️⃣ Selecciona fecha y hora</strong>
+          <p>Escoge el horario que más te convenga.</p>
+        </div>
+
+        <div class="step">
+          <strong>4️⃣ Paga y confirma</strong>
+          <p>Realiza tu pago para asegurar tu cita.</p>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    © 2026 Mantenimiento de Vehículos
+  </footer>
+
+  <script>
+    function buscarVIN() {
+
+      const vin = document.getElementById("vin").value.trim();
+
+      if (vin.length !== 17) {
+        alert("Por favor ingresa un VIN válido de 17 caracteres.");
+        return;
+      }
+
+      document.getElementById("resultado").style.display = "block";
+
+      document.getElementById("vehiculo").innerText =
+        "Vehículo identificado por VIN: " + vin;
+
+      document.getElementById("aceite").innerText =
+        "Se consultará automáticamente.";
+
+      document.getElementById("filtro").innerText =
+        "Se consultará automáticamente.";
+    }
+
+    function reservar() {
+      alert("La sección de reservas será agregada en el siguiente paso.");
+    }
+  </script>
+
+</body>
+</html>
