@@ -234,13 +234,16 @@
       const marca = vehiculo.Make || "No disponible";
       const modelo = vehiculo.Model || "No disponible";
       const año = vehiculo.ModelYear || "No disponible";
-      const motor = vehiculo.EngineCylinders || "No disponible";
+      const cilindros = vehiculo.EngineCylinders || "No disponible";
+      const motor = vehiculo.DisplacementL || "No disponible";
+      const combustible = vehiculo.FuelTypePrimary || "No disponible";
 
       document.getElementById("vehiculo").innerText =
-        año + " " + marca + " " + modelo;
+        año + " " + marca + " " + modelo +
+        " — Motor " + motor + "L V" + cilindros;
 
       document.getElementById("aceite").innerText =
-        "Motor: " + motor + " cilindros";
+        "Combustible: " + combustible;
 
       document.getElementById("filtro").innerText =
         "VIN verificado correctamente.";
