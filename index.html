@@ -213,7 +213,7 @@
   </footer>
 
   <script>
-   function buscarVIN() {
+  function buscarVIN() {
 
   const vin = document.getElementById("vin").value.trim().toUpperCase();
 
@@ -231,22 +231,37 @@
 
       const vehiculo = data.Results[0];
 
-      const marca = vehiculo.Make || "No disponible";
-      const modelo = vehiculo.Model || "No disponible";
-      const año = vehiculo.ModelYear || "No disponible";
-      const cilindros = vehiculo.EngineCylinders || "No disponible";
-      const motor = vehiculo.DisplacementL || "No disponible";
-      const combustible = vehiculo.FuelTypePrimary || "No disponible";
+      const marca = (vehiculo.Make || "").trim();
+      const modelo = (vehiculo.Model || "").trim();
+      const año = (vehiculo.ModelYear || "").trim();
+      const cilindros = (vehiculo.EngineCylinders || "").trim();
+      const motor = (vehiculo.DisplacementL || "").trim();
+      const combustible = (vehiculo.FuelTypePrimary || "").trim();
 
       document.getElementById("vehiculo").innerText =
         año + " " + marca + " " + modelo +
         " — Motor " + motor + "L V" + cilindros;
 
+      let aceite = "Información pendiente de verificación";
+      let cantidad = "Información pendiente de verificación";
+      let filtro = "Información pendiente de verificación";
+
+      if (
+        año === "2023" &&
+        marca.toUpperCase() === "RAM" &&
+        modelo.toUpperCase() === "PROMASTER 2500" &&
+        parseFloat(motor) === 3.6
+      ) {
+        aceite = "SAE 0W-20 Full Synthetic (MS-6395)";
+        cantidad = "6 qt (5.6 L) con filtro";
+        filtro = "Mopar 68191349AC";
+      }
+
       document.getElementById("aceite").innerText =
-        "Combustible: " + combustible;
+        aceite + "\nCantidad: " + cantidad;
 
       document.getElementById("filtro").innerText =
-        "VIN verificado correctamente.";
+        filtro;
 
     })
     .catch(error => {
