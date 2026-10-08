@@ -299,7 +299,8 @@
 
       <label>Teléfono</label>
       <input id="telefonoCliente" type="tel" placeholder="Tu número de teléfono" style="width:100%; padding:12px; margin:8px 0 15px;">
-
+<label>Dirección de tu casa</label>
+<input id="direccionCliente" type="text" placeholder="Calle, ciudad, estado y código postal" style="width:100%; padding:12px; margin:8px 0 15px;">
       <label>Fecha del servicio</label>
       <input id="fechaServicio" type="date" style="width:100%; padding:12px; margin:8px 0 15px;">
 
@@ -334,10 +335,11 @@
 
   const nombre = document.getElementById("nombreCliente").value.trim();
   const telefono = document.getElementById("telefonoCliente").value.trim();
+      const direccion = document.getElementById("direccionCliente").value.trim();
   const fecha = document.getElementById("fechaServicio").value;
   const hora = document.getElementById("horaServicio").value;
 
-  if (!nombre || !telefono || !fecha || !hora) {
+  if (!nombre || !telefono || !direccion || !fecha || !hora) {
     alert("Por favor completa todos los datos de la reserva.");
     return;
   }
@@ -346,6 +348,7 @@
     "Reserva preparada correctamente.\n\n" +
     "Nombre: " + nombre + "\n" +
     "Teléfono: " + telefono + "\n" +
+    "Dirección: " + direccion + "\n" +
     "Fecha: " + fecha + "\n" +
     "Hora: " + hora + "\n\n" +
     "Servicio: Cambio de aceite\n" +
