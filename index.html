@@ -279,9 +279,79 @@
 
     });
 }
-    function reservar() {
-      alert("La sección de reservas será agregada en el siguiente paso.");
-    }
+   function reservar() {
+
+  if (document.getElementById("formularioReserva")) {
+    return;
+  }
+
+  const formulario = document.createElement("div");
+
+  formulario.id = "formularioReserva";
+
+  formulario.innerHTML = `
+    <div style="margin-top:20px; padding:20px; border-radius:12px; background:#f5f5f5;">
+
+      <h2>Reservar mi servicio</h2>
+
+      <label>Nombre completo</label>
+      <input id="nombreCliente" type="text" placeholder="Tu nombre" style="width:100%; padding:12px; margin:8px 0 15px;">
+
+      <label>Teléfono</label>
+      <input id="telefonoCliente" type="tel" placeholder="Tu número de teléfono" style="width:100%; padding:12px; margin:8px 0 15px;">
+
+      <label>Fecha del servicio</label>
+      <input id="fechaServicio" type="date" style="width:100%; padding:12px; margin:8px 0 15px;">
+
+      <label>Hora del servicio</label>
+      <select id="horaServicio" style="width:100%; padding:12px; margin:8px 0 15px;">
+        <option value="">Selecciona una hora</option>
+        <option>9:00 AM</option>
+        <option>10:00 AM</option>
+        <option>11:00 AM</option>
+        <option>12:00 PM</option>
+        <option>1:00 PM</option>
+        <option>2:00 PM</option>
+        <option>3:00 PM</option>
+        <option>4:00 PM</option>
+        <option>5:00 PM</option>
+      </select>
+
+      <p><strong>Servicio:</strong> Cambio de aceite</p>
+      <p><strong>Precio:</strong> $89.99</p>
+
+      <button type="button" onclick="confirmarReserva()" style="width:100%; padding:14px;">
+        Continuar
+      </button>
+
+    </div>
+  `;
+
+  document.getElementById("resultado").appendChild(formulario);
+
+}
+    function confirmarReserva() {
+
+  const nombre = document.getElementById("nombreCliente").value.trim();
+  const telefono = document.getElementById("telefonoCliente").value.trim();
+  const fecha = document.getElementById("fechaServicio").value;
+  const hora = document.getElementById("horaServicio").value;
+
+  if (!nombre || !telefono || !fecha || !hora) {
+    alert("Por favor completa todos los datos de la reserva.");
+    return;
+  }
+
+  alert(
+    "Reserva preparada correctamente.\n\n" +
+    "Nombre: " + nombre + "\n" +
+    "Teléfono: " + telefono + "\n" +
+    "Fecha: " + fecha + "\n" +
+    "Hora: " + hora + "\n\n" +
+    "Servicio: Cambio de aceite\n" +
+    "Precio: $89.99"
+  );
+}
   </script>
 
 </body>
