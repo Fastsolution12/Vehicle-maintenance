@@ -213,27 +213,54 @@
   </footer>
 
   <script>
-    function buscarVIN() {
+   function buscarVIN() {
 
-      const vin = document.getElementById("vin").value.trim();
+  const vin = document.getElementById("vin").value.trim().toUpperCase();
 
-      if (vin.length !== 17) {
-        alert("Por favor ingresa un VIN válido de 17 caracteres.");
-        return;
-      }
+  if (vin.length !== 17) {
+    alert("Por favor ingresa un VIN válido de 17 caracteres.");
+    return;
+  }
 
-      document.getElementById("resultado").style.display = "block";
+  document.getElementById("resultado").style.display = "block";
+  document.getElementById("vehiculo").innerText = "Consultando vehículo...";
+
+  fetch("https://vpic.nhtsa.dot.gov/api/vehicles/DecodeVinValues/" + encodeURIComponent(vin) + "?format=json")
+    .then(response => response.json())
+    .then(data => {
+
+      const vehiculo = data.Results[0];
+
+      const marca = vehiculo.Make || "No disponible";
+      const modelo = vehiculo.Model || "No disponible";
+      const año = vehiculo.ModelYear || "No disponible";
+      const motor = vehiculo.EngineCylinders || "No disponible";
 
       document.getElementById("vehiculo").innerText =
-        "Vehículo identificado por VIN: " + vin;
+        año + " " + marca + " " + modelo;
 
       document.getElementById("aceite").innerText =
-        "Se consultará automáticamente.";
+        "Motor: " + motor + " cilindros";
 
       document.getElementById("filtro").innerText =
-        "Se consultará automáticamente.";
-    }
+        "VIN verificado correctamente.";
 
+    })
+    .catch(error => {
+
+      console.error(error);
+
+      document.getElementById("vehiculo").innerText =
+        "No pudimos consultar este VIN.";
+
+      document.getElementById("aceite").innerText =
+        "Intenta nuevamente.";
+
+      document.getElementById("filtro").innerText =
+        "Verifica que el VIN tenga 17 caracteres.";
+
+    });
+}
     function reservar() {
       alert("La sección de reservas será agregada en el siguiente paso.");
     }
