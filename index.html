@@ -213,8 +213,10 @@
   </footer>
 
   <script>
-  function buscarVIN() {
+const SUPABASE_URL = "https://qmicftnflpmhunhbljpj.supabase.co";
+const SUPABASE_KEY = "sb_publishable_b3vcMJ744BeqT-ahrONwvg_W_2L-bd-";
 
+  function buscarVIN() {
   const vin = document.getElementById("vin").value.trim().toUpperCase();
 
   if (vin.length !== 17) {
@@ -331,29 +333,58 @@
   document.getElementById("resultado").appendChild(formulario);
 
 }
-    function confirmarReserva() {
-
+  async function confirmarReserva() {
   const nombre = document.getElementById("nombreCliente").value.trim();
   const telefono = document.getElementById("telefonoCliente").value.trim();
-      const direccion = document.getElementById("direccionCliente").value.trim();
+  const direccion = document.getElementById("direccionCliente").value.trim();
   const fecha = document.getElementById("fechaServicio").value;
   const hora = document.getElementById("horaServicio").value;
+  const vin = document.getElementById("vin")?.value.trim().toUpperCase() || "";
+  const vehiculo = document.getElementById("vehiculo")?.innerText.trim() || "";
 
   if (!nombre || !telefono || !direccion || !fecha || !hora) {
     alert("Por favor completa todos los datos de la reserva.");
     return;
   }
 
-  alert(
-    "Reserva preparada correctamente.\n\n" +
-    "Nombre: " + nombre + "\n" +
-    "Teléfono: " + telefono + "\n" +
-    "Dirección: " + direccion + "\n" +
-    "Fecha: " + fecha + "\n" +
-    "Hora: " + hora + "\n\n" +
-    "Servicio: Cambio de aceite\n" +
-    "Precio: $89.99"
-  );
+  try {
+    const respuesta = await fetch(
+      "https://qmicftnflpmhunhbljpj.supabase.co/rest/v1/reservas",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "apikey": SUPABASE_KEY,
+          "Authorization": "Bearer " + SUPABASE_KEY,
+          "Prefer": "return=minimal"
+        },
+        body: JSON.stringify({
+          "nombre cliente": nombre,
+          "telefono": telefono,
+          "fecha reserva": fecha,
+          "hora reserva": hora,
+          "vin": vin,
+          "vehiculo": vehiculo,
+          "servicio": "Cambio de aceite",
+          "precio": 89.99,
+          "estado pago": "Pendiente"
+        })
+      }
+    );
+
+    if (!respuesta.ok) {
+      const error = await respuesta.text();
+      console.error("Error al guardar la reserva:", error);
+      alert("No se pudo guardar la reserva. Error: " + error);
+      return;
+    }
+
+    alert("¡Reserva guardada correctamente!");
+
+  } catch (error) {
+    console.error(error);
+    alert("No se pudo conectar con el servidor. Intenta de nuevo.");
+  }
 }
   </script>
 
