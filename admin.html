@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Panel de Administración</title>
+<style>
+* { box-sizing: border-box; }
+body {
+  font-family: Arial, sans-serif;
+  background: #f1f5f9;
+  margin: 0;
+  padding: 24px;
+  color: #172033;
+}
+.card {
+  max-width: 900px;
+  margin: 35px auto;
+  padding: 28px;
+  background: white;
+  border-radius: 16px;
+}
+input, button {
+  width: 100%;
+  padding: 13px;
+  margin: 8px 0;
+  border-radius: 8px;
+}
+input { border: 1px solid #ccd3df; }
+button {
+  border: 0;
+  background: #1457d9;
+  color: white;
+  cursor: pointer;
+}
+.reserva {
+  padding: 16px;
+  border: 1px solid #dce2eb;
+  border-radius: 10px;
+  margin: 12px 0;
+  overflow-wrap: anywhere;
+}
+.oculto { display: none; }
+</style>
+</head>
+<body>
+<section class="card" id="login">
+<h1>Panel de Administración</h1>
+<h2>Iniciar sesión</h2>
+<form id="formLogin">
+<input id="correo" type="email"
+placeholder="Correo del administrador" required>
+<input id="contrasena" type="password"
+placeholder="Contraseña" required>
+<button type="submit">Entrar</button>
+</form>
+<p id="mensaje"></p>
+</section>
+<section class="card oculto" id="panel">
+<h1>Reservas de vehículos</h1>
+<button id="actualizar">Actualizar reservas</button>
+<button id="salir">Cerrar sesión</button>
+<div id="lista"></div>
+</section>
+<script>
+const SUPABASE_URL =
+"https://qmicftnflpmhunhbljpj.supabase.co";
+const SUPABASE_KEY = "sb_publishable_b3vcMJ744BeqT-ahrONwvg_W_2L-bd-";
+ async function iniciarSesion(evento) {
+  evento.preventDefault();
+  const mensaje = document.getElementById("mensaje");
+  mensaje.textContent = "Verificando acceso...";
+  try {
+    const respuesta = await fetch(
+      SUPABASE_URL + "/auth/v1/token?grant_type=password",
+      {
+        method: "POST",
+        headers: {
+          "apikey": SUPABASE_KEY,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          email: document.getElementById("correo").value.trim(),
+          password: document.getElementById("contrasena").value
+        })
+      }
+    );
+    const datos = await respuesta.json();
+    if (!respuesta.ok) {
+      throw new Error("Correo o contraseña incorrectos.");
+    }
+    const verificacion = await fetch(
+      SUPABASE_URL +
+      "/rest/v1/admin_usuarios?select=usuario_id&usuario_id=eq." +
+      encodeURIComponent(datos.user.id),
+      {
+        headers: {
+          "apikey": SUPABASE_KEY,
+          "Authorization": "Bearer " + datos.access_token
+        }
+      }
+    );
+    if (!verificacion.ok) {
+      throw new Error("No se pudieron verificar los permisos.");
+    }
+    const administradores = await verificacion.json();
+    if (!administradores.length) {
+      throw new Error("Usuario sin autorización de administrador.");
+    }
+    window.tokenAdmin = datos.access_token;
+    document.getElementById("login").classList.add("oculto");
+    document.getElementById("panel").classList.remove("oculto");
+    mensaje.textContent = "";
+    await cargarReservas();
+  } catch (error) {
+    mensaje.textContent = error.message;
+  }
+}
+async function cargarReservas() {
+  const lista = document.getElementById("lista");
+  lista.textContent = "Cargando reservas...";
+  try {
+    const respuesta = await fetch(
+      SUPABASE_URL +
+      "/rest/v1/reservas?select=*&order=created_at.desc",
+      {
+        headers: {
+          "apikey": SUPABASE_KEY,
+          "Authorization": "Bearer " + window.tokenAdmin
+        }
+      }
+    );
+    if (!respuesta.ok) {
+      throw new Error("No se pudieron cargar las reservas.");
+    }
+    const reservas = await respuesta.json();
+    lista.replaceChildren();
+    if (!reservas.length) {
+      lista.textContent = "No hay reservas todavía.";
+      return;
+    }
+    reservas.forEach(function(reserva) {
+      const tarjeta = document.createElement("article");
+      tarjeta.className = "reserva";
+      tarjeta.textContent = JSON.stringify(reserva, null, 2);
+      lista.appendChild(tarjeta);
+    });
+  } catch (error) {
+    lista.textContent = error.message;
+  }
+}
+document.getElementById("formLogin")
+  .addEventListener("submit", iniciarSesion);
+document.getElementById("actualizar")
+  .addEventListener("click", cargarReservas);
+document.getElementById("salir")
+  .addEventListener("click", function() {
+    window.tokenAdmin = "";
+    document.getElementById("panel").classList.add("oculto");
+    document.getElementById("login").classList.remove("oculto");
+    document.getElementById("formLogin").reset();
+  }); 
+</script>
+
+
+
+
+  
