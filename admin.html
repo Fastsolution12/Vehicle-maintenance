@@ -142,8 +142,38 @@ async function cargarReservas() {
     reservas.forEach(function(reserva) {
       const tarjeta = document.createElement("article");
       tarjeta.className = "reserva";
-      tarjeta.textContent = JSON.stringify(reserva, null, 2);
-      lista.appendChild(tarjeta);
+   const campos = [
+  ["Reserva", reserva.id],
+  ["Cliente", reserva["nombre cliente"]],
+  ["Teléfono", reserva.telefono],
+  ["Dirección", reserva.direccion],
+  ["Vehículo", reserva.vehiculo],
+  ["VIN", reserva.vin],
+  ["Servicio", reserva.servicio],
+  ["Fecha", reserva["fecha reserva"]],
+  ["Hora", reserva["hora reserva"]],
+  ["Precio", reserva.precio == null ? "0.00" : "$" + reserva.precio],
+  ["Estado del pago", reserva["estado pago"] || "Pendiente"]
+];
+
+campos.forEach(function(campo) {
+  const fila = document.createElement("p");
+  const etiqueta = document.createElement("strong");
+
+  etiqueta.textContent = campo[0] + ": ";
+  fila.appendChild(etiqueta);
+
+  const valor = document.createElement("span");
+  valor.textContent =
+    campo[1] == null || campo[1] === ""
+      ? "No indicado"
+      : String(campo[1]);
+
+  fila.appendChild(valor);
+  tarjeta.appendChild(fila);
+});
+
+lista.appendChild(tarjeta);
     });
   } catch (error) {
     lista.textContent = error.message;
