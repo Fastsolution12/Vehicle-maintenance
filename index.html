@@ -341,7 +341,18 @@ const SUPABASE_KEY = "sb_publishable_b3vcMJ744BeqT-ahrONwvg_W_2L-bd-";
   const hora = document.getElementById("horaServicio").value;
   const vin = document.getElementById("vin")?.value.trim().toUpperCase() || "";
   const vehiculo = document.getElementById("vehiculo")?.innerText.trim() || "";
-
+  const elementoPrecio = document.getElementById("precioCambio");
+if (!elementoPrecio || !elementoPrecio.dataset.precio) {
+  alert("El precio todavía no está disponible. Intenta más tarde.");
+  return;
+}
+  const precio = Number(
+  document.getElementById("precioCambio").dataset.precio
+);  
+if (!Number.isFinite(precio) || precio <= 0) {
+  alert("El precio calculado no es válido. Intenta más tarde.");
+  return;
+}
   if (!nombre || !telefono || !direccion || !fecha || !hora) {
     alert("Por favor completa todos los datos de la reserva.");
     return;
@@ -367,7 +378,7 @@ const SUPABASE_KEY = "sb_publishable_b3vcMJ744BeqT-ahrONwvg_W_2L-bd-";
           "vin": vin,
           "vehiculo": vehiculo,
           "servicio": "Cambio de aceite",
-          "precio": 89.99,
+          "precio": precio,
           "estado pago": "Pendiente"
         })
       }
