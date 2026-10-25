@@ -244,20 +244,21 @@ const SUPABASE_KEY = "sb_publishable_b3vcMJ744BeqT-ahrONwvg_W_2L-bd-";
         año + " " + marca + " " + modelo +
         " — Motor " + motor + "L V" + cilindros;
 
-      let aceite = "Información pendiente de verificación";
-      let cantidad = "Información pendiente de verificación";
-      let filtro = "Información pendiente de verificación";
+    let aceite = "Pendiente de consultar catálogo";
+let cantidad = "Pendiente de consultar catálogo";
+let filtro = "Pendiente de consultar catálogo";
 
-      if (
-        año === "2023" &&
-        marca.toUpperCase() === "RAM" &&
-        modelo.toUpperCase() === "PROMASTER 2500" &&
-        parseFloat(motor) === 3.6
-      ) {
-        aceite = "SAE 0W-20 Full Synthetic (MS-6395)";
-        cantidad = "6 qt (5.6 L) con filtro";
-        filtro = "Mopar 68191349AC";
-      }
+const vehiculoIdentificado = {
+  anio: año,
+  marca: marca,
+  modelo: modelo,
+  motor: motor,
+  cilindros: cilindros,
+  combustible: combustible
+};
+
+document.getElementById("vehiculo").dataset.datosVehiculo =
+  JSON.stringify(vehiculoIdentificado);
 
       document.getElementById("aceite").innerText =
         aceite + "\nCantidad: " + cantidad;
